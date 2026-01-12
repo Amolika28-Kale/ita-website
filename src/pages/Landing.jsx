@@ -1,8 +1,14 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, CheckCircle2, Star, ArrowRight, PlayCircle } from "lucide-react";
-import { useState } from "react";
+import { ChevronDown, CheckCircle2, Star, ArrowRight, PlayCircle,ShieldCheck,
+  BarChart3,
+  TrendingUp,
+  DollarSign,
+  Zap,
+  Users, } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 /* ================= ANIMATIONS ================= */
 const fadeUp = {
@@ -25,6 +31,26 @@ const staggerContainer = {
 };
 
 export default function Landing() {
+  const navigate = useNavigate();
+
+  // ================= COUNTDOWN TIMER =================
+const [timeLeft, setTimeLeft] = useState(15 * 60); // 15 minutes in seconds
+
+useEffect(() => {
+  if (timeLeft <= 0) return;
+
+  const timer = setInterval(() => {
+    setTimeLeft((prev) => prev - 1);
+  }, 1000);
+
+  return () => clearInterval(timer);
+}, [timeLeft]);
+
+const days = Math.floor(timeLeft / (24 * 60 * 60));
+const hours = Math.floor((timeLeft % (24 * 60 * 60)) / 3600);
+const minutes = Math.floor((timeLeft % 3600) / 60);
+const seconds = timeLeft % 60;
+
   return (
     <main className="pt-20 md:pt-28 space-y-24 md:space-y-40 bg-slate-50 text-slate-900 overflow-x-hidden selection:bg-indigo-100 selection:text-indigo-700">
 
@@ -57,7 +83,8 @@ export default function Landing() {
           </motion.p>
 
           <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-            <button className="group relative bg-indigo-600 text-white px-8 py-4 rounded-xl font-bold shadow-xl shadow-indigo-200 transition-all hover:bg-indigo-700 hover:shadow-indigo-300 active:scale-95 flex items-center justify-center gap-2">
+            <button onClick={() => navigate("/contact")}
+             className="group relative bg-indigo-600 text-white px-8 py-4 rounded-xl font-bold shadow-xl shadow-indigo-200 transition-all hover:bg-indigo-700 hover:shadow-indigo-300 active:scale-95 flex items-center justify-center gap-2">
               JOIN NOW <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
             <button className="flex items-center justify-center gap-2 border-2 border-slate-200 bg-white px-8 py-4 rounded-xl font-bold transition-all hover:border-indigo-600 hover:text-indigo-600">
@@ -153,7 +180,6 @@ export default function Landing() {
       </section>
 
       {/* ================= FREE MASTERCLASS ================= */}
-       {/* ================= FREE MASTERCLASS ================= */}
       <section id="webinar" className="bg-indigo-50 py-20 md:py-28">
         <div className="max-w-6xl mx-auto px-4 md:px-6 space-y-16">
 
@@ -172,43 +198,120 @@ export default function Landing() {
               <span>✔ Live Market Examples</span>
             </div>
 
-            <button className="mt-8 bg-indigo-600 text-white px-10 py-4 rounded-xl font-semibold shadow-lg">
+            <button onClick={() => navigate("/contact")}
+             className="mt-8 bg-indigo-600 text-white px-10 py-4 rounded-xl font-semibold shadow-lg">
               BOOK MY VIP SEAT NOW
             </button>
           </motion.div>
 
-          {/* Countdown */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-            {["DAYS", "HOURS", "MINUTES", "SECONDS"].map((l) => (
-              <div key={l} className="bg-white border border-indigo-200 rounded-xl p-4 shadow-sm">
-                <div className="text-2xl font-bold text-indigo-600">00</div>
-                <div className="text-xs text-slate-500 mt-1">{l}</div>
-              </div>
-            ))}
-          </div>
+{/* Countdown */}
+<div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+  {[
+    ["DAYS", days],
+    ["HOURS", hours],
+    ["MINUTES", minutes],
+    ["SECONDS", seconds],
+  ].map(([label, value]) => (
+    <div
+      key={label}
+      className="bg-white border border-indigo-200 rounded-xl p-4 shadow-sm"
+    >
+      <div className="text-3xl font-bold text-indigo-600">
+        {String(value).padStart(2, "0")}
+      </div>
+      <div className="text-xs text-slate-500 mt-1">{label}</div>
+    </div>
+  ))}
+</div>
 
-          {/* Who Can Join */}
-          <div>
-            <h3 className="text-2xl font-bold text-center mb-8">
-              Who can join this MASTERCLASS?
-            </h3>
+{/* Who Can Join */}
+<div>
+  <h3 className="text-2xl font-bold text-center mb-8">
+    Who can join this MASTERCLASS?
+  </h3>
 
-            <div className="grid md:grid-cols-2 gap-6">
-              {[
-                ["Beginners", "No prior market knowledge required"],
-                ["Investors", "Convert investing into trading"],
-                ["Loss-Making Traders", "Fix mistakes & regain confidence"],
-                ["Students & Professionals", "Fits busy schedules"],
-              ].map(([t, d]) => (
-                <div key={t} className="bg-white border border-indigo-200 rounded-xl p-6 shadow-sm">
-                  <h4 className="font-semibold mb-2">{t}</h4>
-                  <p className="text-slate-600 text-sm">{d}</p>
-                </div>
-              ))}
-            </div>
-          </div>
+  <div className="grid md:grid-cols-2 gap-6">
+    {[
+      ["Beginners", "No prior market knowledge required", "🚀"],
+      ["Investors", "Convert investing into trading", "📈"],
+      ["Loss-Making Traders", "Fix mistakes & regain confidence", "🔄"],
+      ["Students & Professionals", "Fits busy schedules", "🎓"],
+    ].map(([title, desc, emoji]) => (
+      <div
+        key={title}
+        className="
+          bg-white border border-indigo-200 rounded-xl
+          p-6 shadow-sm
+          flex gap-4 items-start
+        "
+      >
+        <div className="text-3xl">{emoji}</div>
+
+        <div>
+          <h4 className="font-semibold mb-1">{title}</h4>
+          <p className="text-slate-600 text-sm">{desc}</p>
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
         </div>
       </section>
+{/* Trading Visuals */}
+<div className="grid md:grid-cols-2 gap-6">
+  <motion.div
+    variants={fadeUp}
+    initial="hidden"
+    whileInView="visible"
+    className="
+      bg-white border border-indigo-200 rounded-xl
+      overflow-hidden shadow-sm
+      hover:shadow-md transition
+    "
+  >
+    <img
+      src="https://images.unsplash.com/photo-1551288049-bebda4e38f71"
+      alt="Live Trading Setup"
+      className="h-64 w-full object-cover hover:scale-105 transition duration-500"
+      loading="lazy"
+    />
+    <div className="p-4">
+      <p className="font-semibold text-slate-700">
+        Live Market Trading Setup
+      </p>
+      <p className="text-sm text-slate-500">
+        Learn real-time decision making with expert guidance
+      </p>
+    </div>
+  </motion.div>
+
+  <motion.div
+    variants={fadeUp}
+    initial="hidden"
+    whileInView="visible"
+    className="
+      bg-white border border-indigo-200 rounded-xl
+      overflow-hidden shadow-sm
+      hover:shadow-md transition
+    "
+  >
+    <img
+      src="https://images.unsplash.com/photo-1634704784915-aacf363b021f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8dHJhZGluZ3xlbnwwfHwwfHx8MA%3D%3D"
+      alt="Stock Market Analysis"
+      className="h-64 w-full object-cover hover:scale-105 transition duration-500"
+      loading="lazy"
+    />
+    <div className="p-4">
+      <p className="font-semibold text-slate-700">
+        Professional Chart Analysis
+      </p>
+      <p className="text-sm text-slate-500">
+        Master technical analysis used by full-time traders
+      </p>
+    </div>
+  </motion.div>
+</div>
 
 
       {/* ================= COURSES ================= */}
@@ -296,7 +399,8 @@ export default function Landing() {
                     </li>
                   ))}
                 </ul>
-                <button className="w-full py-4 rounded-2xl bg-indigo-600 text-white font-black shadow-lg shadow-indigo-200 group-hover:scale-105 transition-all">
+                <button onClick={() => navigate("/contact")}
+                 className="w-full py-4 rounded-2xl bg-indigo-600 text-white font-black shadow-lg shadow-indigo-200 group-hover:scale-105 transition-all">
                   JOIN NOW
                 </button>
               </div>
@@ -304,6 +408,88 @@ export default function Landing() {
           </div>
         </div>
       </section>
+      {/* ================= WHY ITA ================= */}
+<section
+  id="whyita"
+  className="relative py-24 bg-gradient-to-b from-black via-slate-950 to-black"
+>
+  {/* Glow background */}
+  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(139,92,246,0.15),_transparent_60%)]" />
+
+  <div className="relative max-w-7xl mx-auto px-4 md:px-6">
+    {/* Heading */}
+    <motion.h2
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      className="text-center text-3xl md:text-4xl font-bold text-white mb-14"
+    >
+      WHY ITA?
+    </motion.h2>
+
+    {/* Cards */}
+    <div className="grid md:grid-cols-3 gap-8">
+      {[
+        {
+          title: "Most Trusted Institute",
+          desc: "Join India's most trusted trading institute with verified results and proven methodologies",
+          icon: ShieldCheck,
+        },
+        {
+          title: "India's Biggest Live Trading Floor",
+          desc: "Join the largest live trading floor in India with our successful traders",
+          icon: BarChart3,
+        },
+        {
+          title: "Back-tested Strategies",
+          desc: "Learn proven strategies that have been thoroughly tested and validated in real markets",
+          icon: TrendingUp,
+        },
+        {
+          title: "Funding Opportunities",
+          desc: "Get access to funding opportunities and join our professional trading desk",
+          icon: DollarSign,
+        },
+        {
+          title: "Modern Trading Tech",
+          desc: "Access state-of-the-art trading technology and advanced trading tools",
+          icon: Zap,
+        },
+        {
+          title: "Many Success Stories",
+          desc: "Join thousands of successful traders who have transformed their financial future with us",
+          icon: Users,
+        },
+      ].map(({ title, desc, icon: Icon }) => (
+        <motion.div
+          key={title}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="
+            bg-gradient-to-br from-slate-900 to-black
+            border border-indigo-600/60
+            rounded-2xl p-7
+            shadow-[0_0_25px_rgba(139,92,246,0.15)]
+            hover:shadow-[0_0_40px_rgba(139,92,246,0.35)]
+            transition
+          "
+        >
+          <div className="w-12 h-12 rounded-xl bg-indigo-600/20 flex items-center justify-center mb-5">
+            <Icon className="text-indigo-400" size={24} />
+          </div>
+
+          <h3 className="text-white font-semibold text-lg mb-3">
+            {title}
+          </h3>
+          <p className="text-slate-400 text-sm leading-relaxed">
+            {desc}
+          </p>
+        </motion.div>
+      ))}
+    </div>
+  </div>
+</section>
 
       {/* ================= GALLERY ================= */}
       <section id="gallery" className="py-32 bg-slate-900 text-white relative overflow-hidden">
@@ -399,7 +585,8 @@ export default function Landing() {
             <h2 className="text-3xl md:text-6xl font-black mb-8 text-white leading-tight">
               READY TO TRANSFORM YOUR <br className="hidden md:block"/> TRADING JOURNEY?
             </h2>
-            <button className="bg-white text-indigo-600 hover:bg-slate-50 px-12 py-5 rounded-2xl font-black text-xl shadow-2xl transition-all hover:scale-105 active:scale-95">
+            <button onClick={() => navigate("/contact")}
+             className="bg-white text-indigo-600 hover:bg-slate-50 px-12 py-5 rounded-2xl font-black text-xl shadow-2xl transition-all hover:scale-105 active:scale-95">
               START YOUR JOURNEY TODAY
             </button>
           </div>
